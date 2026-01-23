@@ -1,0 +1,18 @@
+{
+  "transaction_type": {
+    "ui:title": "Transaction Type"
+  },
+  "description": {
+    "ui:autofocus": true,
+    "ui:placeholder": "Enter the description",
+    "ui:title": "Description"
+  },
+  "amount": {
+    "ui:title": "Amount (₹)",
+    "ui:placeholder": "0.00"
+  },
+  "category": {
+    "ui:title": "Category",
+    "ui:placeholder": "Select a category"
+  }
+}
