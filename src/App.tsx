@@ -1,4 +1,4 @@
-import { PiggyBank, TrendingDown, TrendingUp, Wallet } from 'lucide-react';
+import { PiggyBank, Sun, TrendingDown, TrendingUp, Wallet } from 'lucide-react';
 import './App.css';
 import SummaryCard from './components/SummaryCard';
 import { useState } from 'react';
@@ -7,6 +7,9 @@ import RecentTransactions from './components/RecentTransactions';
 import type { TransactionDetails } from './types/transaction.types';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import BudgetOverview from './components/BudgetOverview';
+import categoryConfig from './config/category.config.json'
+import { useTheme, type Theme } from './context/ThemeContext';
 
 function DashboardLoading() {
   return (
@@ -51,6 +54,41 @@ function App() {
     },
   });
 
+  const theme = useTheme();
+
+  const getBudgetData = (data: TransactionDetails[]) => {
+    const result: Record<string, number> = {};
+    data.forEach((transaction) => {
+      categoryConfig.AVAILABLE_CATEGORIES.forEach((category) => {
+        if (transaction.category === category) {
+          if (!result[category]) result[category] = 0;
+          result[category] += transaction.amount;
+        }
+      });
+    });
+    return result;
+  };
+
+  const getTotalIncome = (data: TransactionDetails[]) => {
+    return data
+      .filter((transaction) => transaction.transaction_type === 'Income')
+      .reduce((total, transaction) => total + transaction.amount, 0);
+  };
+
+  const getTotalExpense = (data: TransactionDetails[]) => {
+    return data
+      .filter((transaction) => transaction.transaction_type === 'Expense')
+      .reduce((total, transaction) => total + transaction.amount, 0);
+  };
+
+  const getTotalSavings = (data: TransactionDetails[]) => {
+    return 0;
+  };
+  
+  const getTotalBalance = (data: TransactionDetails[]) => {
+    return getTotalIncome(data) - getTotalExpense(data);
+  };
+
   const [transactionModalVisibility, setTransactionModalVisibility] =
     useState(false);
 
@@ -63,7 +101,7 @@ function App() {
   }
 
   return (
-    <div className="w-full h-screen flex justify-center font-serif">
+    <div className="w-full h-screen flex justify-center font-serif bg-(--body-background)">
       {transactionModalVisibility && (
         <AddTransactionModal
           isVisible={transactionModalVisibility}
@@ -71,20 +109,21 @@ function App() {
         />
       )}
 
-      <div className="dashboard-container p-8 h-full flex flex-col gap-4 w-300 min-h-0">
+      <div className="bg-(--dashboard-background) p-8 h-full flex flex-col gap-4 w-300 min-h-0">
         <div className="navbar flex gap-4">
           <div className="navbar-left flex-1 p-4 flex flex-col">
-            <span className="text-3xl font-bold">
+            <span className="text-3xl font-bold text-(--light-text-color)">
               Dashboard
             </span>
-            <span className="text-xl">
+            <span className="text-xl text-(--muted-text)">
               Track and manage your expenses effectively
             </span>
           </div>
 
           <div className="navbar-right flex-1 p-4 flex justify-end items-center">
+            <button className='m-2 p-3 rounded-2xl cursor-pointer text-(--light-text-color)' onClick={theme.toggleTheme}><Sun /></button>
             <button
-              className="bg-[#1b284a] text-white px-4 p-2 rounded-xl"
+              className="bg-(--add-transaction-button-background) text-(--dark-text-color) px-4 p-2 rounded-xl"
               onClick={() =>
                 setTransactionModalVisibility(true)
               }
@@ -98,28 +137,28 @@ function App() {
           <SummaryCard
             Icon={Wallet}
             title="Total Balance"
-            amount={0}
+            amount={getTotalBalance(data)}
             percentChange={12.5}
             iconStyle="bg-orange-200 text-orange-600"
           />
           <SummaryCard
             Icon={TrendingUp}
             title="Total Income"
-            amount={0}
+            amount={getTotalIncome(data)}
             percentChange={8.2}
             iconStyle="bg-green-200 text-green-600"
           />
           <SummaryCard
             Icon={TrendingDown}
             title="Total Expense"
-            amount={0}
+            amount={getTotalExpense(data)}
             percentChange={3.1}
             iconStyle="bg-red-200 text-red-600"
           />
           <SummaryCard
             Icon={PiggyBank}
             title="Total Savings"
-            amount={0}
+            amount={getTotalSavings(data)}
             percentChange={24.5}
             iconStyle="bg-purple-200 text-purple-600"
           />
@@ -127,7 +166,7 @@ function App() {
 
         <div className="flex-1 flex gap-4 p-2 min-h-0">
           <RecentTransactions transactions={data} />
-          <div className="flex-1 bg-white rounded-2xl" />
+          <BudgetOverview budgetData={getBudgetData(data)} />
         </div>
       </div>
     </div>

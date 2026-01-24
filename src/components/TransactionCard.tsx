@@ -1,75 +1,11 @@
 import {
-  Wallet,
-  Utensils,
-  Home,
-  Lightbulb,
-  Plane,
-  Film,
-  User,
-  Repeat,
-  CircleDollarSign,
   EditIcon,
-  type LucideIcon,
+  CircleDollarSign,
 } from 'lucide-react';
-
-export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
-  'Food & Dining': Utensils,
-  'Rent / Housing': Home,
-  Utilities: Lightbulb,
-  Travel: Plane,
-  Entertainment: Film,
-  'Personal Care': User,
-  Subscriptions: Repeat,
-  Miscellaneous: CircleDollarSign,
-};
+import { CATEGORY_ICON_MAP, CATEGORY_STYLE_MAP } from '../config/category_style.config';
+import type { TransactionCardProps } from '../types/transaction.types';
 
 
-type TransactionCardProps = {
-  description: string;
-  category: string;
-  amount: number;
-  currencySymbol?: string;
-  timeAgo: number;
-  Icon?: LucideIcon;
-};
-
-export const CATEGORY_STYLE_MAP: Record<
-  string,
-  { bg: string; text: string }
-> = {
-  'Food & Dining': {
-    bg: 'bg-orange-100',
-    text: 'text-orange-600',
-  },
-  'Rent / Housing': {
-    bg: 'bg-blue-100',
-    text: 'text-blue-600',
-  },
-  Utilities: {
-    bg: 'bg-yellow-100',
-    text: 'text-yellow-600',
-  },
-  Travel: {
-    bg: 'bg-purple-100',
-    text: 'text-purple-600',
-  },
-  Entertainment: {
-    bg: 'bg-pink-100',
-    text: 'text-pink-600',
-  },
-  'Personal Care': {
-    bg: 'bg-green-100',
-    text: 'text-green-600',
-  },
-  Subscriptions: {
-    bg: 'bg-red-100',
-    text: 'text-red-600',
-  },
-  Miscellaneous: {
-    bg: 'bg-gray-100',
-    text: 'text-gray-600',
-  },
-};
 
 export default function TransactionCard({
   description,
@@ -78,7 +14,7 @@ export default function TransactionCard({
   currencySymbol = '₹',
   timeAgo,
 }: TransactionCardProps) {
-  const Icon = CATEGORY_ICON_MAP[category] ?? Wallet;
+  const Icon = CATEGORY_ICON_MAP[category] ?? CircleDollarSign;
 
   const style = CATEGORY_STYLE_MAP[category] ?? {
     bg: 'bg-gray-100',
@@ -94,10 +30,10 @@ export default function TransactionCard({
           />
 
           <div className="flex flex-col">
-            <span className="text-[1rem] font-medium">
+            <span className="text-[1rem] font-medium text-(--light-text-color)">
               {description}
             </span>
-            <span className="text-[0.8rem] text-gray-500">
+            <span className="text-[0.8rem] text-(--muted-text)">
               {category}
             </span>
           </div>
@@ -105,7 +41,7 @@ export default function TransactionCard({
 
         <div className="flex gap-2 items-center">
           <div className="flex flex-col text-right">
-            <span className="text-[1rem] font-semibold">
+            <span className="text-[1rem] font-semibold text-(--light-text-color)">
               {currencySymbol}
               {amount}
             </span>
@@ -114,7 +50,9 @@ export default function TransactionCard({
             </span>
           </div>
 
-          <button className="w-10 h-10 p-2 flex items-center bg-white border-0  hover:visible hover:bg-black text-white hover:border rounded-md">
+          <button className="w-10 h-10 p-2 flex items-center
+          bg-(--edit-button-background-invisible) border-0 hover:bg-(--edit-button-background-hover)
+          text-(--edit-button-text-invisible) hover:text-(--edit-button-text-hover) hover:border rounded-md">
             <EditIcon />
           </button>
         </div>

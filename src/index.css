@@ -135,3 +135,56 @@ body, #root{
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  /* Backgrounds */
+  --body-background: #fafafa;              /* soft white */
+  --dashboard-background: #f4f5f7;         /* subtle contrast */
+  --card-background: #ffffff;              /* elevated surface */
+
+  /* Text */
+  --light-text-color: #0f172a;              /* primary text */
+  --muted-text: oklch(55% 0.01 275);        /* neutral muted */
+  --dark-text-color: #ffffff;               /* for dark surfaces */
+
+  /* Brand / Actions (Purple) */
+  --add-transaction-button-background: #6d28d9; /* violet-700 */
+  
+  /* Edit button states */
+  --edit-button-background-hover: #0f172a;
+  --edit-button-background-invisible: transparent;
+  --edit-button-text-invisible: transparent;
+  --edit-button-text-hover: #ffffff;
+
+  /* Progress / Charts */
+  --completed-progress-color: #6d28d9;
+  --total-progress-color: #cbd5e1;
+}
+
+
+[data-theme="dark"] {
+  /* Backgrounds (purple-tinted dark) */
+  --body-background: #0b0f2a;        /* deep indigo-purple */
+  --dashboard-background: #0a0e24;   /* main surface */
+  --card-background: #11163a;        /* lifted card */
+
+  /* Text */
+  --light-text-color: #ede9fe;       /* soft lavender-white */
+  --muted-text: #a5b4fc;             /* muted purple */
+  --dark-text-color: #0a0e24;        /* for light buttons */
+
+  /* Brand / Actions */
+  --add-transaction-button-background: #ffffff; /* white primary action */
+
+  /* Edit button states */
+  --edit-button-background-invisible: transparent; /* blends with dashboard */
+  --edit-button-text-invisible: transparent;      /* visible but muted */
+
+  --edit-button-background-hover: #0a0e24;      /* white on hover */
+  --edit-button-text-hover: #a5b4fc;              /* dark text on white */
+
+  /* Progress / Charts */
+  --completed-progress-color: #c4b5fd;           /* bright purple */
+  --total-progress-color: #2b2f55;                /* muted track */
+}
+
