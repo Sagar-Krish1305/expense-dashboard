@@ -1,7 +1,7 @@
-import ExpenseCategoryChart from "./ExpenseByCategoryChart";
+import ExpenseCategoryChart, { type ExpenseCategoryDatum } from "./ExpenseByCategoryChart";
 
 
-export default function IncomeVSExpense() {
+export default function ExpenseByCategory({ data }: { data: ExpenseCategoryDatum[] }) {
   return (
     <div className="h-140 w-full bg-(--card-background) rounded-2xl flex flex-col gap-6 p-4 border ">
       <div className="flex items-center justify-between m-2">
@@ -10,7 +10,7 @@ export default function IncomeVSExpense() {
         </span>
       </div>
 
-        <ExpenseCategoryChart />
+        <ExpenseCategoryChart data={data} />
     </div>
   );
 }

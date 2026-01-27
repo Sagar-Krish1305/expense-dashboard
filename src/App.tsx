@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import BudgetOverview from './components/BudgetOverview';
 import categoryConfig from './config/category.config.json'
-import { useTheme, type Theme } from './context/ThemeContext';
+import { useTheme } from './context/ThemeContext';
 import IncomeVSExpense from './components/IncomeVSExpense';
 import ExpenseByCategory from './components/ExpenseByCategory';
 import EditTransactionModal from './components/EditTransactionModal';
@@ -89,12 +89,30 @@ function App() {
       .reduce((total, transaction) => total + transaction.amount, 0);
   };
 
-  const getTotalSavings = (data: TransactionDetails[]) => {
-    return 0;
-  };
+  const getTotalSavings = () => 0;
   
   const getTotalBalance = (data: TransactionDetails[]) => {
     return getTotalIncome(data) - getTotalExpense(data);
+  };
+
+  const getExpenseByCategoryData = (data: TransactionDetails[]) => {
+    const totals: Record<string, number> = {};
+    categoryConfig.AVAILABLE_EXPENSE_CATEGORIES.forEach((cat) => {
+      totals[cat] = 0;
+    });
+
+    data
+      .filter((tx) => tx.transaction_type === 'Expense')
+      .forEach((tx) => {
+        if (totals[tx.category] !== undefined) {
+          totals[tx.category] += tx.amount;
+        }
+      });
+
+    return categoryConfig.AVAILABLE_EXPENSE_CATEGORIES.map((cat) => ({
+      name: cat,
+      value: totals[cat] ?? 0,
+    }));
   };
 
   const [transactionModalVisibility, setTransactionModalVisibility] =
@@ -179,18 +197,18 @@ function App() {
           <SummaryCard
             Icon={PiggyBank}
             title="Total Savings"
-            amount={getTotalSavings(data)}
+            amount={getTotalSavings()}
             percentChange={24.5}
             iconStyle="bg-purple-200 text-purple-600"
           />
         </div>
 
         <div className="w-full flex flex-col gap-4 min-h-0 lg:flex-row">
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-2/3">
             <IncomeVSExpense />
           </div>
-          <div className="w-full lg:w-1/2">
-            <ExpenseByCategory />
+          <div className="w-full lg:w-1/3">
+            <ExpenseByCategory data={getExpenseByCategoryData(data)} />
           </div>
         </div>
 

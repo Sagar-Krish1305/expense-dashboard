@@ -1,13 +1,7 @@
-const data = [
-  { name: "Food & Dining", value: 3200 },
-  { name: "Rent / Housing", value: 2500 },
-  { name: "Utilities", value: 1800 },
-  { name: "Travel", value: 1200 },
-  { name: "Entertainment", value: 900 },
-  { name: "Personal Care", value: 700 },
-  { name: "Subscriptions", value: 650 },
-  { name: "Miscellaneous", value: 500 }
-];
+export type ExpenseCategoryDatum = {
+  name: string;
+  value: number;
+};
 
 import {
   PieChart,
@@ -21,18 +15,15 @@ import { useTheme } from "../context/ThemeContext";
 
 const getSliceColor = (category: string, theme: "light" | "dark") => {
   const style = CATEGORY_STYLE_MAP[category];
-  const fallback = theme === "dark" ? style.pieChartColorDark : style.pieChartColorLight; 
-
-  if (!style) return fallback;
 
   const color = theme === "dark"
     ? style.pieChartColorDark
     : style.pieChartColorLight;
 
-  return color ?? fallback;
+  return color;
 };
 
-export default function ExpenseCategoryChart() {
+export default function ExpenseCategoryChart({ data }: { data: ExpenseCategoryDatum[] }) {
   const { theme } = useTheme();
 
   return (
