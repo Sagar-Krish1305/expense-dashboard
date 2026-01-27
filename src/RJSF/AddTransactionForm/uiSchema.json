@@ -14,5 +14,13 @@
   "category": {
     "ui:title": "Category",
     "ui:placeholder": "Select a category"
+  },
+  "ui:submitButtonOptions": {
+    "submitText": "Send",
+    "norender": false,
+    "props": {
+      "disabled": false,
+      "className": "bg-purple-600 px-4 py-3 rounded-2xl text-white"
+    }
   }
 }

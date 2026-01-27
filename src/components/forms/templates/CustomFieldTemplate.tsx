@@ -19,7 +19,7 @@ export function CustomFieldTemplate(props: FieldTemplateProps) {
       {label && (
         <label
           htmlFor={id}
-          className="text-sm font-medium text-foreground"
+          className="text-sm font-medium text-(--light-text-color)"
         >
           {label}
           {required && (

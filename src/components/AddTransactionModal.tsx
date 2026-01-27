@@ -20,7 +20,9 @@ export default function AddTransactionModal({
       "
     >
       {/* Modal content */}
-      <AddTransactionForm />
+      <AddTransactionForm
+        setModalVisibility={setVisibility}
+      />
     </div>
   );
 }

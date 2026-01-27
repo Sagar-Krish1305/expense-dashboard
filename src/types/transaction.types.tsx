@@ -20,3 +20,4 @@ export type TransactionCardProps = {
   timeAgo: number;
   Icon?: LucideIcon;
 };
+

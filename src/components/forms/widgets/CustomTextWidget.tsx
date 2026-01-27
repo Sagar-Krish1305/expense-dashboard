@@ -19,7 +19,7 @@ export function CustomTextWidget({
       type={(options?.inputType as string) || 'text'}
       value={value ?? ''}
       placeholder={placeholder}
-      className='border-black focus:ring-0 focus:outline-none'
+      className='border-violet-600 focus:ring-0 focus:outline-none'
       disabled={disabled || readonly}
       required={required}
       onChange={(e) => onChange(e.target.value)}

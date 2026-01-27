@@ -20,7 +20,7 @@ export function CustomSelectWidget({
       onValueChange={(val) => onChange(val)}
       disabled={disabled}
     >
-      <SelectTrigger className="w-full border-2 border-black">
+      <SelectTrigger className="w-full border-2 border-purple-600">
         <SelectValue placeholder={placeholder ?? "Select"} />
       </SelectTrigger>
 

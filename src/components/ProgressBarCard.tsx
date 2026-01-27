@@ -15,7 +15,7 @@ export default function ProgressBarCard({category, amountSpend, budget} : Progre
                 <span className='text-(--light-text-color) text-[0.9rem]'>{category}</span>
                 <span className='text-(--muted-text) text-[0.9rem]'>{amountSpend.toFixed(2)}₹ / {budget.toFixed(2)}₹ </span>
             </div>
-            <Progress className={`${amountSpend > budget ? 'bg-red-600' : ''}`} value={percent} ></Progress>
+            <Progress isOverflow={amountSpend > budget} value={percent} ></Progress>
         </div>
     );
 }

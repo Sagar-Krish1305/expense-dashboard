@@ -13,7 +13,7 @@ export default function BudgetOverview({ budgetData }: BudgetOverviewProps) {
           </span>
           <button className="h-full px-4 flex justify-center rounded hover:underline font-semibold text-(--light-text-color)">Edit Budget</button>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col overflow-y-auto">
             {
                 Object.keys(budgetData).map((category: string) => (
                   <ProgressBarCard

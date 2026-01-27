@@ -58,8 +58,13 @@ function App() {
 
   const getBudgetData = (data: TransactionDetails[]) => {
     const result: Record<string, number> = {};
+    const categories = [
+      ...categoryConfig.AVAILABLE_EXPENSE_CATEGORIES,
+      ...categoryConfig.AVAILABLE_INCOME_CATEGORIES,
+    ];
+
     data.forEach((transaction) => {
-      categoryConfig.AVAILABLE_CATEGORIES.forEach((category) => {
+      categories.forEach((category) => {
         if (transaction.category === category) {
           if (!result[category]) result[category] = 0;
           result[category] += transaction.amount;
