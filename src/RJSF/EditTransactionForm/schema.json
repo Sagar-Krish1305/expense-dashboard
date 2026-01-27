@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "required": ["transaction_type", "description", "amount", "category"],
+  "properties": {
+    "transaction_type": {
+      "type": "string",
+      "enum": ["Expense", "Income"],
+      "default": "Expense"
+    },
+    "description": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "category": {
+      "type": "string"
+    }
+  },
+  "if": {
+    "properties": {
+      "transaction_type": { "const": "Expense" }
+    }
+  },
+  "then": {
+    "properties": {
+      "category": {
+        "enum": [
+          "Food & Dining",
+          "Rent / Housing",
+          "Utilities",
+          "Travel",
+          "Entertainment",
+          "Personal Care",
+          "Subscriptions",
+          "Miscellaneous"
+        ]
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "category": {
+        "enum": [
+          "Salary",
+          "Freelance",
+          "Business",
+          "Investments",
+          "Interest",
+          "Gifts",
+          "Refunds",
+          "Other Income"
+        ]
+      }
+    }
+  }
+}

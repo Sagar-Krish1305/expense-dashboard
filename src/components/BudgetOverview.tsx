@@ -6,7 +6,7 @@ type BudgetOverviewProps = {
 
 export default function BudgetOverview({ budgetData }: BudgetOverviewProps) {
   return (
-      <div className="flex-1 bg-(--card-background) rounded-2xl flex flex-col gap-6 p-4 overflow-y-auto min-h-0 h-full border">
+      <div className="flex-1 min-h-150 bg-(--card-background) rounded-2xl flex flex-col gap-6 p-4 overflow-y-auto h-full border">
         <div className="flex items-center justify-between m-6">
           <span className="text-[1rem] font-bold text-(--light-text-color)">
             Budget Overview

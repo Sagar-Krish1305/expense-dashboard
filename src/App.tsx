@@ -11,6 +11,8 @@ import BudgetOverview from './components/BudgetOverview';
 import categoryConfig from './config/category.config.json'
 import { useTheme, type Theme } from './context/ThemeContext';
 import IncomeVSExpense from './components/IncomeVSExpense';
+import ExpenseByCategory from './components/ExpenseByCategory';
+import EditTransactionModal from './components/EditTransactionModal';
 
 function DashboardLoading() {
   return (
@@ -97,6 +99,8 @@ function App() {
 
   const [transactionModalVisibility, setTransactionModalVisibility] =
     useState(false);
+  const [editModalVisibility, setEditModalVisibility] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState<TransactionDetails | null>(null);
 
   if (isPending) {
     return <DashboardLoading />;
@@ -107,39 +111,50 @@ function App() {
   }
 
   return (
-    <div className="w-full h-screen flex justify-center font-serif bg-(--body-background)">
+    <div className="w-full min-h-screen flex justify-center font-serif bg-(--body-background) overflow-y-auto">
       {transactionModalVisibility && (
         <AddTransactionModal
           isVisible={transactionModalVisibility}
           setVisibility={setTransactionModalVisibility}
         />
       )}
+      {editModalVisibility && selectedTransaction && (
+        <EditTransactionModal
+          isVisible={editModalVisibility}
+          setVisibility={setEditModalVisibility}
+          transaction={selectedTransaction}
+        />
+      )}
 
-      <div className="bg-(--dashboard-background) p-8 h-full flex flex-col gap-4 w-300 min-h-0">
-        <div className="navbar flex gap-4">
-          <div className="navbar-left flex-1 p-4 flex flex-col">
-            <span className="text-3xl font-bold text-(--light-text-color)">
+      <div className="bg-(--dashboard-background) w-full max-w-6xl px-4 sm:px-6 lg:px-12 py-8 sm:py-10 flex flex-col gap-6 min-h-screen">
+        <div className='flex flex-col gap-6'>
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-1">
+            <span className="text-2xl sm:text-3xl font-bold text-(--light-text-color)">
               Dashboard
             </span>
-            <span className="text-xl text-(--muted-text)">
+            <span className="text-base sm:text-lg text-(--muted-text)">
               Track and manage your expenses effectively
             </span>
           </div>
 
-          <div className="navbar-right flex-1 p-4 flex justify-end items-center">
-            <button className='m-2 p-3 rounded-2xl cursor-pointer text-(--light-text-color)' onClick={theme.toggleTheme}><Sun /></button>
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
-              className="bg-(--add-transaction-button-background) text-(--dark-text-color) px-4 p-2 rounded-xl"
-              onClick={() =>
-                setTransactionModalVisibility(true)
-              }
+              className="p-3 rounded-2xl cursor-pointer text-(--light-text-color) border sm:border-0"
+              onClick={theme.toggleTheme}
+            >
+              <Sun />
+            </button>
+            <button
+              className="bg-(--add-transaction-button-background) text-(--dark-text-color) px-4 py-2 rounded-xl w-full sm:w-auto"
+              onClick={() => setTransactionModalVisibility(true)}
             >
               + Add Transaction
             </button>
           </div>
         </div>
 
-        <div className="summary-cards-container flex gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <SummaryCard
             Icon={Wallet}
             title="Total Balance"
@@ -170,14 +185,30 @@ function App() {
           />
         </div>
 
-        <div className="flex-1 flex gap-4 p-2 min-h-0">
-              <IncomeVSExpense></IncomeVSExpense>
+        <div className="w-full flex flex-col gap-4 min-h-0 lg:flex-row">
+          <div className="w-full lg:w-1/2">
+            <IncomeVSExpense />
+          </div>
+          <div className="w-full lg:w-1/2">
+            <ExpenseByCategory />
+          </div>
         </div>
 
-        <div className="flex-1 flex gap-4 p-2 min-h-0">
-          <RecentTransactions transactions={data} />
-          <BudgetOverview budgetData={getBudgetData(data)} />
+        <div className="w-full flex flex-col gap-4 min-h-0 lg:flex-row">
+          <div className="w-full">
+            <RecentTransactions
+              transactions={data}
+              onEditTransaction={(tx) => {
+                setSelectedTransaction(tx);
+                setEditModalVisibility(true);
+              }}
+            />
+          </div>
+          <div className="w-full">
+            <BudgetOverview budgetData={getBudgetData(data)} />
+          </div>
         </div>
+      </div>
       </div>
     </div>
   );

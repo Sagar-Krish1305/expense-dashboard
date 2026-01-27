@@ -1,11 +1,4 @@
-const data = [
-  { month: "Jan", income: 5200, expense: 3800 },
-  { month: "Feb", income: 4800, expense: 4200 },
-  { month: "Mar", income: 5600, expense: 3900 },
-  { month: "Apr", income: 5100, expense: 4100 },
-  { month: "May", income: 5400, expense: 3600 },
-  { month: "Jun", income: 5800, expense: 4400 }
-];
+
 
 // Keep axes aligned with design tokens defined in CSS variables.
 const axisLineColor = "var(--total-progress-color)";
@@ -33,7 +26,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-export default function IncomeExpenseChart() {
+export default function IncomeExpenseChart({ data } : { data: { month: string, income: number, expense: number }[] } ) {
   return (
     <div className="h-full w-full rounded-xl border bg-(--card-background) p-6">
 

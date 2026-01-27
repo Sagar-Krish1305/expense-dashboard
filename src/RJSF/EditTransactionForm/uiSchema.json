@@ -1,0 +1,26 @@
+{
+  "transaction_type": {
+    "ui:title": "Transaction Type"
+  },
+  "description": {
+    "ui:autofocus": true,
+    "ui:placeholder": "Update the description",
+    "ui:title": "Description"
+  },
+  "amount": {
+    "ui:title": "Amount (₹)",
+    "ui:placeholder": "0.00"
+  },
+  "category": {
+    "ui:title": "Category",
+    "ui:placeholder": "Select a category"
+  },
+  "ui:submitButtonOptions": {
+    "submitText": "Save",
+    "norender": false,
+    "props": {
+      "disabled": false,
+      "className": "bg-purple-600 px-4 py-3 rounded-2xl text-white"
+    }
+  }
+}

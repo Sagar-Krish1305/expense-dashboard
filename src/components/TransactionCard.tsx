@@ -8,11 +8,14 @@ import type { TransactionCardProps } from '../types/transaction.types';
 
 
 export default function TransactionCard({
+  id,
+  transaction_date,
   description,
   category,
   amount,
   currencySymbol = '₹',
   timeAgo,
+  onEdit,
 }: TransactionCardProps) {
   const Icon = CATEGORY_ICON_MAP[category] ?? CircleDollarSign;
 
@@ -50,9 +53,13 @@ export default function TransactionCard({
             </span>
           </div>
 
-          <button className="w-10 h-10 p-2 flex items-center
+          <button
+            onClick={onEdit}
+            className="w-10 h-10 p-2 flex items-center
           bg-(--edit-button-background-invisible) border-0 hover:bg-(--edit-button-background-hover)
-          text-(--edit-button-text-invisible) hover:text-(--edit-button-text-hover) hover:border rounded-md">
+          text-(--edit-button-text-invisible) hover:text-(--edit-button-text-hover) hover:border rounded-md"
+            aria-label="Edit transaction"
+          >
             <EditIcon />
           </button>
         </div>

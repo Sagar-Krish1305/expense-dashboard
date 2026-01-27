@@ -3,6 +3,7 @@ import TransactionCard from './TransactionCard';
 
 export default function RecentTransactions({
   transactions,
+  onEditTransaction,
 }: RecentTransactionsProps) {
   return (
     <div className="flex-1 bg-(--card-background) rounded-2xl flex flex-col gap-6 p-4 border ">
@@ -11,14 +12,17 @@ export default function RecentTransactions({
           Recent Transactions
         </span>
       </div>
-      <div className='overflow-y-auto min-h-0 h-full'> 
+      <div className='h-150 overflow-y-auto min-h-0'> 
       {transactions.map((transaction, index) => (
         <TransactionCard
           key={index}
+          id={transaction.id}
+          transaction_date={transaction.transaction_date}
           description={transaction.description}
           category={transaction.category}
           amount={transaction.amount}
           timeAgo={getDaysAgo(transaction.transaction_date)}
+          onEdit={onEditTransaction ? () => onEditTransaction(transaction) : undefined}
         />
       ))}
       </div>
