@@ -10,6 +10,7 @@ import axios from 'axios';
 import BudgetOverview from './components/BudgetOverview';
 import categoryConfig from './config/category.config.json'
 import { useTheme, type Theme } from './context/ThemeContext';
+import IncomeVSExpense from './components/IncomeVSExpense';
 
 function DashboardLoading() {
   return (
@@ -167,6 +168,10 @@ function App() {
             percentChange={24.5}
             iconStyle="bg-purple-200 text-purple-600"
           />
+        </div>
+
+        <div className="flex-1 flex gap-4 p-2 min-h-0">
+              <IncomeVSExpense></IncomeVSExpense>
         </div>
 
         <div className="flex-1 flex gap-4 p-2 min-h-0">
