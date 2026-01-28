@@ -27,59 +27,68 @@ import {
 } from "recharts";
 
 export default function IncomeExpenseChart({ data } : { data: { month: string, income: number, expense: number }[] } ) {
+  const hasData = Array.isArray(data) && data.some((d) => (d.income ?? 0) !== 0 || (d.expense ?? 0) !== 0);
+
   return (
     <div className="h-full w-full rounded-xl border bg-(--card-background) p-6">
+      {!hasData ? (
+        <div className="h-full w-full flex items-center justify-center text-(--muted-text)">
+          Add some transactions to see income vs expense.
+        </div>
+      ) : (
+        <div className="h-100 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
 
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data}>
+            <defs>
+              <linearGradient id="income" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#4CAF50" stopOpacity={0} />
+              </linearGradient>
 
-          <defs>
-            <linearGradient id="income" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#4CAF50" stopOpacity={0} />
-            </linearGradient>
-
-            <linearGradient id="expense" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#E76F51" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#E76F51" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-
-
-          <XAxis
-            dataKey="month"
-            axisLine={{ stroke: axisLineColor }}
-            tickLine={{ stroke: axisLineColor }}
-            tick={{ fill: axisLabelColor, fontSize: 12 }}
-          />
-          <YAxis
-            tickFormatter={(v) => `₹${v / 1000}k`}
-            axisLine={{ stroke: axisLineColor }}
-            tickLine={{ stroke: axisLineColor }}
-            tick={{ fill: axisLabelColor, fontSize: 12 }}
-          />
+              <linearGradient id="expense" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#E76F51" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#E76F51" stopOpacity={0} />
+              </linearGradient>
+            </defs>
 
 
-          <Tooltip content={<CustomTooltip />} />
+            <XAxis
+              dataKey="month"
+              axisLine={{ stroke: axisLineColor }}
+              tickLine={{ stroke: axisLineColor }}
+              tick={{ fill: axisLabelColor, fontSize: 12 }}
+            />
+            <YAxis
+              tickFormatter={(v) => `₹${v / 1000}k`}
+              axisLine={{ stroke: axisLineColor }}
+              tickLine={{ stroke: axisLineColor }}
+              tick={{ fill: axisLabelColor, fontSize: 12 }}
+            />
 
 
-          <Area
-            type="monotone"
-            dataKey="income"
-            stroke="#4CAF50"
-            fill="url(#income)"
-            strokeWidth={2}
-          />
+            <Tooltip content={<CustomTooltip />} />
 
-          <Area
-            type="monotone"
-            dataKey="expense"
-            stroke="#E76F51"
-            fill="url(#expense)"
-            strokeWidth={2}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+
+            <Area
+              type="monotone"
+              dataKey="income"
+              stroke="#4CAF50"
+              fill="url(#income)"
+              strokeWidth={2}
+            />
+
+            <Area
+              type="monotone"
+              dataKey="expense"
+              stroke="#E76F51"
+              fill="url(#expense)"
+              strokeWidth={2}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 }

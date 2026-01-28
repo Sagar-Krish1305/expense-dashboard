@@ -63,7 +63,6 @@ function App() {
     const result: Record<string, number> = {};
     const categories = [
       ...categoryConfig.AVAILABLE_EXPENSE_CATEGORIES,
-      ...categoryConfig.AVAILABLE_INCOME_CATEGORIES,
     ];
 
     data.forEach((transaction) => {
@@ -204,11 +203,11 @@ function App() {
         </div>
 
         <div className="w-full flex flex-col gap-4 min-h-0 lg:flex-row">
-          <div className="w-full lg:w-2/3">
-            <IncomeVSExpense />
-          </div>
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-10/25">
             <ExpenseByCategory data={getExpenseByCategoryData(data)} />
+          </div>
+          <div className="w-full lg:w-15/25">
+            <IncomeVSExpense />
           </div>
         </div>
 

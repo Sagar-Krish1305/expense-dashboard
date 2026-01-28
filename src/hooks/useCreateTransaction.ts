@@ -11,7 +11,6 @@ type PreviousMonthDatum = {
 };
 
 async function createTransaction(data: TransactionDetails) {
-  // 1) Save the raw transaction
   const res = await fetch("http://localhost:3000/transactions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -20,40 +19,55 @@ async function createTransaction(data: TransactionDetails) {
 
   if (!res.ok) throw new Error("Failed to save transaction");
 
-  // 2) Update the aggregated current-month dataset used by the chart
   const txDate = new Date(data.transaction_date);
-  const monthLabel = txDate.toLocaleString("en-US", { month: "short" }); // e.g., Jan, Feb
+  const monthLabel = txDate.toLocaleString("en-US", { month: "short" }); 
 
-  // Load existing month aggregates
   const prevRes = await fetch("http://localhost:3000/previous_months_data");
   if (!prevRes.ok) throw new Error("Failed to load monthly aggregates");
   const prevData = (await prevRes.json()) as PreviousMonthDatum[];
+  const lastEntry = prevData[prevData.length - 1];
+  const sameMonth = lastEntry && lastEntry.month === monthLabel;
 
-  const existing = prevData.find((p) => p.month === monthLabel);
+  const addToEntry = (entry: PreviousMonthDatum): PreviousMonthDatum => {
+    const updated = { ...entry };
+    if (data.transaction_type === "Income") {
+      updated.income += data.amount;
+    } else {
+      updated.expense += data.amount;
+    }
+    return updated;
+  };
 
-  const updated: PreviousMonthDatum = existing
-    ? { ...existing }
-    : { month: monthLabel, income: 0, expense: 0 };
-
-  if (data.transaction_type === "Income") {
-    updated.income += data.amount;
+  if (sameMonth && lastEntry?.id !== undefined) {
+    const updated = addToEntry(lastEntry);
+    const aggRes = await fetch(`http://localhost:3000/previous_months_data/${lastEntry.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated)
+    });
+    
+    if (!aggRes.ok) throw new Error("Failed to update monthly aggregates");
   } else {
-    updated.expense += data.amount;
+    const oldest = prevData[0];
+    if (oldest?.id !== undefined) {
+      await fetch(`http://localhost:3000/previous_months_data/${oldest.id}`, {
+        method: "DELETE"
+      });
+    }
+
+    const newEntry: PreviousMonthDatum = addToEntry({
+      month: monthLabel,
+      income: 0,
+      expense: 0,
+    });
+
+    const aggRes = await fetch("http://localhost:3000/previous_months_data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newEntry)
+    });
+    if (!aggRes.ok) throw new Error("Failed to update monthly aggregates");
   }
-
-  const saveUrl = existing?.id
-    ? `http://localhost:3000/previous_months_data/${existing.id}`
-    : "http://localhost:3000/previous_months_data";
-
-  const saveMethod = existing?.id ? "PUT" : "POST";
-
-  const aggRes = await fetch(saveUrl, {
-    method: saveMethod,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updated)
-  });
-
-  if (!aggRes.ok) throw new Error("Failed to update monthly aggregates");
 
   return res.json();
 }
